@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>36OpenTalk</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()">Переключить тему</button>
+    </div>
+
+    <div class="container">
+        <h1>36OpenTalk</h1>
+        <textarea id="messageText" rows="5" cols="50" placeholder="Введите ваше сообщение"></textarea><br>
+        <button onclick="sendMessage()">Отправить</button>
+        <button onclick="window.open('https://t.me/rodnaya36', '_blank')">Перейти в Telegram</button> <!-- Кнопка перехода на сторонний ресурс -->
+        <div id="message"></div>
+
+        <div class="contact-info">
+            <h3>Gromof</h3>
+            <p>https://t.me/StepanGromof</p>
+            <p>©Громов Степан 2024-2025</p>
+        </div>
+    </div>
+
+    <script>
+        const BOT_TOKEN = "8077294714:AAFtQ5NjN-PHvvn9tDRE4vHRk-RtmISWKFk";
+        const CHANNEL_ID = "@rodnaya36"; // ITS REAL LIFE!
+        const TELEGRAM_API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+        async function sendMessage() {
+            const messageText = document.getElementById("messageText").value;
+            const messageDiv = document.getElementById("message");
+
+            try {
+                const response = await fetch(TELEGRAM_API_URL + `?chat_id=${CHANNEL_ID}&text=${encodeURIComponent(messageText)}`, {
+                    method: "POST",
+                });
+
+                if (response.ok) {
+                    messageDiv.className = "success";
+                    messageDiv.textContent = "Сообщение успешно отправлено!";
+                } else {
+                    messageDiv.className = "error";
+                    messageDiv.textContent = "Ошибка при отправке сообщения: " + response.statusText;
+                }
+
+            } catch (error) {
+                messageDiv.className = "error";
+                messageDiv.textContent = "Произошла ошибка при отправке запроса: " + error;
+            }
+        }
+
+        function toggleTheme() {
+            const body = document.querySelector("body");
+            body.classList.toggle("dark-theme");
+        }
+    </script>
+</body>
+</html>
